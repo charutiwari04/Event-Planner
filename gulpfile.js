@@ -3,6 +3,8 @@ var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var eslint = require('gulp-eslint');
+var uglify = require('gulp-uglify');
+var cssmin = require('gulp-cssmin');
 browserSync.init({
 	server: "./"
 });
@@ -37,4 +39,16 @@ gulp.task('lint', function () {
         // To have the process exit with an error code (1) on 
         // lint error, return the stream and pipe to failAfterError last. 
         .pipe(eslint.failAfterError());
+});
+
+gulp.task('compress', function(){
+	return gulp.src(['js/**/*.js'])
+	.pipe(uglify())
+	.pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('compcss', function () {
+	gulp.src('css/**/*.css')
+		.pipe(cssmin())
+		.pipe(gulp.dest('dist/css'));
 });
