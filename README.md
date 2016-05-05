@@ -10,16 +10,25 @@ This App is having three features:
 ##How to Run the app.
 This App is built in Gulp. 
 
-1. Install gulp if you do not have on your system. 
-2. Download all files on a folder in your system.
-3. locate the folder on command line. 
-4. Once everything is setup, type 'gulp' on the command line          * $<folder-name> gulp*
-5. This will automatically open the browser and run the app on your computer. 
-6. On command line it will give IP Address if we want to open this from mobile or outside. 
-7. Use the IP address mentioned in command line to open the app on mobile.
+1. Download all files on a folder in your system.
+2. Locate the folder on the command line.
+3. Either follow step 4 to 6 or step 7.
+4. Install gulp if you do not have on your system. 
+5. Install all the required gulp plugins, for this project required plugins are gulp-sass, gulp-autoprefixer, gulp-eslint, gulp-uglify, gulp-cssmin, browser-sync. It can be installed using coming line 
+     * npm install --save-dev <plugin-name>*
+6. Once everything is setup, type 'gulp' on the command line        
+     * $<folder-name> gulp*
+
+7. Or I have included package.json file, so instead of installing gulp and its plugins, just run command
+     * npm install*.  
+     In this case there is not need of typing gulp command. 
+
+8. This will automatically open the browser and run the app on your computer. 
+9. On command line it will give IP Address if we want to open this from mobile or outside. 
+10. Use the IP address mentioned in command line to open the app on mobile.
 
 ##Skills used
-HTML, CSS, JavaScript, Bootstrap, jQuery, Firebase.
+HTML, CSS, JavaScript, Bootstrap, jQuery, Firebase and gulp.
 
 ##Limitations
 This app is having few limitations as:
