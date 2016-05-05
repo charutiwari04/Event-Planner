@@ -31,18 +31,14 @@ errorMsgs.prototype = {
 		this.msgs.push(msg);
 	},
 	get: function(){
-		var msg = '';
 		switch(this.msgs.length){
 			case 0:
-			    break;
+			    return '';
 			case 1:
-			    msg = this.msgs[0];
-				break;
+			    return this.msgs[0];
 			default:
-			    msg = this.msgs.join('\n');
-				break;
+			    return this.msgs.join('\n');
 		}
-		return msg;
 	}
 }
 /*
@@ -99,8 +95,13 @@ function createAccount(){
 			});
 		}
 	}
+	if(firstPasswd.value <= 0){
+		firstPasswdErrMsgs.set('This field is required');
+	}
+	if(secondPasswd.value <= 0){
+		secondPasswdErrMsgs.set('This field is required');
+	}
 	if(firstPasswd.value === secondPasswd.value && firstPasswd.value.length > 0){
-		console.log("Inside Match");
 		validateSignUpForm();
 	}
 	else{
@@ -108,9 +109,8 @@ function createAccount(){
 	}
 	firstPasswd.setCustomValidity(firstPasswdErrMsgs.get());
 	secondPasswd.setCustomValidity(secondPasswdErrMsgs.get());
-    if(firstPasswdErrMsgs.get().length + secondPasswdErrMsgs.get().length === 0){
-		console.log("Inside Reset");
-	    $('#main-form')[0].reset();
+	if(firstPasswdErrMsgs.get().length + secondPasswdErrMsgs.get().length === 0){
+		$('#main-form')[0].reset();
 		alert("Account Created");
 	}
 }
@@ -137,9 +137,6 @@ function createEvent(){
 	eventType.setCustomValidity(eventTypeErrMsgs.get());
 	
 	// Event Start and End Date Validation.
-	console.log(Date.parse(eventStart.value));
-	console.log(Date.parse(eventEnd.value));
-	console.log(Date.parse(eventEnd.value) - Date.parse(eventStart.value));
 	if(Date.parse(eventStart.value) > Date.parse(eventEnd.value)){
 		eventFormError = true;
 		eventDateErrMsg.set("Start Date > End Date");
@@ -182,17 +179,17 @@ function toggleEventsList(){
 /*
  * Various event handlers.
  */
-$('.sign-up-btn input').on('click', createAccount);
+$('.sign-up-btn').on('click', createAccount);
 $('.sign-up-btn').on('touchstart', createAccount);
 
-$('.event-submit input').on('click', createEvent);
+$('.event-submit').on('click', createEvent);
 $('.event-submit').on('touchstart', createEvent);
 
-$('#toggle-sec-1 span').click(toggleAccountTab);
+$('#toggle-sec-1').click(toggleAccountTab);
 $('#toggle-sec-1').on('touchstart', toggleAccountTab);
 
-$('#toggle-sec-2 span').on('click', toggleEventTab);
+$('#toggle-sec-2').on('click', toggleEventTab);
 $('#toggle-sec-2').on('touchstart', toggleEventTab);
 
-$('#toggle-sec-3 span').on('click', toggleEventsList);
+$('#toggle-sec-3').on('click', toggleEventsList);
 $('#toggle-sec-3').on('touchstart', toggleEventsList);
