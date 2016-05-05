@@ -21,7 +21,16 @@
                 <h3 class="sign-up-heading">Create Account</h3>
 				<span id="toggle-sec-1" class="glyphicon glyphicon-menu-down visible-xs-block"></span>
 				<hr>
-                <form name="main-form" id="main-form" class="hidden-xs">
+				<form name="main-form" id="main-form" class="hidden-xs">
+				    <div id="paswd-req">
+				        <ul id="paswd-req-list"><strong>Password Requirement</strong>
+				            <li>must contain 10 or more characters.</li>
+					        <li>must contain 20 or less characters.</li>
+					        <li>must include lowercase, uppercase letters.</li>
+					        <li>must contain a number.</li>
+					        <li>must not contain any character other than [A-z 0-9 ! @ # $ % ^ & *].</li>
+				        </ul>
+				    </div>
                     <label for="main-name">Your Name 
                         <input class="form-control" id="main-name" type="text" placeholder="Name" autocomplete autofocus required>
                     </label><br><br>
@@ -34,9 +43,13 @@
 					<label for="second">Repeat Password
                         <input class="form-control" id="second" type="password" placeholder="Repeat password" required>
                     </label><br><br>
+					<label for="employer">Employer (Optional)
+                        <input class="form-control" id="employer" type="text" placeholder="Employer" required>
+                    </label><br><br>
                     <input class="sign-up-btn" type="submit" value="Submit">
                 </form>
-            </div>
+				</br>
+			</div>
             <div class="form-2 col-xs-12 col-sm-6 col-md-4">
                 <h3 class="event-heading">Create Event</h3>
 				<span id="toggle-sec-2" class="glyphicon glyphicon-menu-down visible-xs-block"></span>
