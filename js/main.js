@@ -51,8 +51,29 @@ var events = [];
 	eventsRef.on("value", function(snapshot){
 		var arr = snapshot.val();
 		$('#list').html('');
-		for(var i=0; i< arr.length;i++){
-			$('#list').append('<a href="#" class="list-group-item">' + arr[i] + '</a>');
+		if(arr !== null){
+			var htmlText = "<tr><th>Name</th>"+
+						   "<th>Type</th>"+
+						   "<th>Host</th>"+
+						   "<th>Start Date/Time</th>"+
+						   "<th>End Date/Time</th></tr>";
+		    for(var i=0; i< arr.length;i++){
+			
+			    htmlText = htmlText + "<tr><td>" + arr[i].eName + "</td>" + 
+			               "<td>" + arr[i].eType + "</td>" +
+						   "<td>" + arr[i].eHost + "</td>" +
+						   "<td>" + arr[i].eStart + "</td>" +
+						   "<td>" + arr[i].eEnd + "</td></tr>";
+			}
+			$('#list').append(htmlText);
+		}
+		else{
+			var htmlText = "<tr><th>Name</th>"+
+						   "<th>Type</th>"+
+						   "<th>Host</th>"+
+						   "<th>Start Date/Time</th>"+
+						   "<th>End Date/Time</th></tr>";
+			$('#list').append(htmlText);
 		}
 		
 	},
@@ -61,7 +82,8 @@ var events = [];
 	});
 })();
 /*
- * callback function for click event on submit button and handling creation of the account.
+ * callback function for click event on submit button and 
+ * handling creation of the account.
  */
 function createAccount(){
 	var firstPasswdErrMsgs = new errorMsgs();
@@ -72,11 +94,8 @@ function createAccount(){
 	var secondPasswd = document.querySelector('#second');
 	var msg = '';
 	function validateSignUpForm(){
-		if(firstPasswd.value.length < 10){
-			firstPasswdErrMsgs.set('< 10 characters');
-		}
-		else if(firstPasswd.value.length > 20){
-			firstPasswdErrMsgs.set('> 20 characters');
+		if(firstPasswd.value.length > 20){
+			firstPasswdErrMsgs.set('20 or less characters required.');
 		}
 		if (!firstPasswd.value.match(/\d/g)) {
             firstPasswdErrMsgs.set("missing a number");
@@ -91,22 +110,18 @@ function createAccount(){
 		var illegalCharacterGroup = firstPasswd.value.match(/[^A-z0-9\!\@\#\$\%\^\&\*]/g)
 		if (illegalCharacterGroup) {
 			illegalCharacterGroup.forEach(function (illegalChar) {
-				firstPasswdErrMsgs.set("includes illegal character: " + illegalChar);
+				firstPasswdErrMsgs.set("includes illegal character " +'"'+ illegalChar+'"');
 			});
 		}
 	}
-	if(firstPasswd.value <= 0){
-		firstPasswdErrMsgs.set('This field is required');
-	}
-	if(secondPasswd.value <= 0){
-		secondPasswdErrMsgs.set('This field is required');
-	}
+	
 	if(firstPasswd.value === secondPasswd.value && firstPasswd.value.length > 0){
 		validateSignUpForm();
 	}
 	else{
 		secondPasswdErrMsgs.set('Password Mismatch');
 	}
+	
 	firstPasswd.setCustomValidity(firstPasswdErrMsgs.get());
 	secondPasswd.setCustomValidity(secondPasswdErrMsgs.get());
 	if(firstPasswdErrMsgs.get().length + secondPasswdErrMsgs.get().length === 0){
@@ -129,52 +144,34 @@ function createEvent(){
 	var eventDateErrMsg = new errorMsgs();
 	var eventFormError = false;
 	
-	// Event Type Validation.
-	if(eventType.value.length <= 0){
-		eventFormError = true;
-		eventTypeErrMsgs.set("Select Event Type");
-	}
-	eventType.setCustomValidity(eventTypeErrMsgs.get());
-	
 	// Event Start and End Date Validation.
-	if(Date.parse(eventStart.value) > Date.parse(eventEnd.value)){
+	if(Date.parse(eventStart.value) < Date.parse(eventEnd.value)){
+		eventDateErrMsg.set('');
+	}
+	else{
 		eventFormError = true;
-		eventDateErrMsg.set("Start Date > End Date");
+		eventDateErrMsg.set("End Date/Time should be greater than Start Date/Time.");
 	}
 	eventEnd.setCustomValidity(eventDateErrMsg.get());
-	// validation for other fields.
-	if(eventName.value <= 0 || eventHost.value <= 0 || eventStart.value <= 0 || eventEnd.value <= 0 || guestList.value <= 0 || loc.value <= 0){
-		eventFormError = true;
-	}
 	
-	if(!eventFormError){
-	    var eventName = $("#event-name").val();
-	    eventsRef.on("value", function(snapshot){
-        events = snapshot.val();});
-	    events.push(eventName);
+	if(!eventFormError && eventType.value.length > 0 && eventName.value.length > 0 && eventHost.value.length > 0 && guestList.value.length > 0 && loc.value.length > 0){
+		eventStartNew = eventStart.value.replace('T','@');
+		eventEndNew = eventEnd.value.replace('T', '@');
+	    var eventObj = {
+			eName: eventName.value,
+		    eType: eventType.value,
+            eHost: eventHost.value,
+			eStart: eventStartNew,
+			eEnd: eventEndNew
+		}
+		eventsRef.on("value", function(snapshot){
+        events = snapshot.val() || [];
+		});
+	    events.push(eventObj);
         eventsRef.set(events);
 		$('#event-form')[0].reset();
 		alert("Event Created!!!");
     }
-}
-/*
- * Toggle(show/hide) account creation form when tab is clicked or touched.
- */
-function toggleAccountTab(){
-	
-	$('#main-form').toggleClass('hidden-xs');
-}
-/*
- * Toggle(show/hide) event creation form when tab is clicked or touched.
- */
-function toggleEventTab(){
-	$('#event-form').toggleClass('hidden-xs');
-}
-/*
- * Toggle(show/hide) event list when tab is clicked or touched.
- */
-function toggleEventsList(){
-	$('#list').toggleClass('hidden-xs');
 }
 /*
  * Various event handlers.
@@ -184,12 +181,17 @@ $('.sign-up-btn').on('touchstart', createAccount);
 
 $('.event-submit').on('click', createEvent);
 $('.event-submit').on('touchstart', createEvent);
-
-$('#toggle-sec-1').click(toggleAccountTab);
-$('#toggle-sec-1').on('touchstart', toggleAccountTab);
-
-$('#toggle-sec-2').on('click', toggleEventTab);
-$('#toggle-sec-2').on('touchstart', toggleEventTab);
-
-$('#toggle-sec-3').on('click', toggleEventsList);
-$('#toggle-sec-3').on('touchstart', toggleEventsList);
+/*
+ * Live Input fields validation.
+ */
+var inputs = document.getElementsByTagName("input");
+var inputs_len = inputs.length;
+var addDirtyClass = function(evt) {
+  evt.srcElement.classList.toggle("dirty", true);
+};
+for (var i = 0; i < inputs_len; i++) {
+  var input = inputs[i];
+  input.addEventListener("blur", addDirtyClass);
+  input.addEventListener("invalid", addDirtyClass);
+  input.addEventListener("valid", addDirtyClass);
+}

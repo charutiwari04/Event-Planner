@@ -13,11 +13,10 @@ header{
 .sign-up-heading, .event-list, .event-heading{
 	padding-top: 50px;
 }
-
 .main{
+	padding-top: 80px;
 	margin-bottom: 20px;
 }
-
 .sign-up-btn, .event-submit{
 	background-color: #0094FF;
 	border-radius: 5%;
@@ -25,4 +24,10 @@ header{
 }
 #paswd-req{
 	margin-left: -20px;
+}
+input.dirty:not(:focus):invalid {
+  background-color: #FFD9D9;
+}
+input.dirty:not(:focus):valid {
+  background-color: #D9FFD9;
 }

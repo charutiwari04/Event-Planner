@@ -15,13 +15,17 @@
 		    <i class="glyphicon glyphicon-cloud"></i> Meet-Up <i class="glyphicon glyphicon-cloud"></i>
 		</span>
 	</header>
-    <div class="container main">
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-4">
+	<div class="container main">
+	    <ul id="nav-list" class="nav nav-tabs nav-justified">
+            <li><a data-toggle="tab" href="#account_create">Create Account</a></li>
+            <li><a data-toggle="tab" href="#event_create">Create Event</a></li>
+			<li><a data-toggle="tab" href="#event_list">Events List</a></li>
+		</ul>
+		<div class="tab-content">
+            <div id="account_create" class="tab-pane fade in active">
                 <h3 class="sign-up-heading">Create Account</h3>
-				<span id="toggle-sec-1" class="glyphicon glyphicon-menu-down visible-xs-block"></span>
 				<hr>
-				<form name="main-form" id="main-form" class="hidden-xs">
+				<form name="main-form" id="main-form">
 				    <div id="paswd-req">
 				        <ul id="paswd-req-list"><strong>Password Requirement</strong>
 				            <li>must contain 10 or more characters.</li>
@@ -33,31 +37,30 @@
 				    </div>
                     <label for="main-name">Your Name 
                         <input class="form-control" id="main-name" type="text" placeholder="Name" autocomplete autofocus required>
-                    </label><br><br>
-                    <label for="main-email">Email 
-                        <input class="form-control" id="main-email" type="email" placeholder="example@abc.com" autocomplete required>
-                    </label><br><br>
+					</label><br><br>
+					<label for="main-email">Email 
+                        <input class="form-control" id="main-email" type="email" pattern="[A-Za-z0-9._%+-]+\@+[A-Za-z0-9.-]+\.[A-Za-z]{1,}" placeholder="example@abc.com" autocomplete required>
+					</label><br><br>
                     <label for="main-paswd">Password 
-                        <input class="form-control" id="main-paswd" type="password" placeholder="New password" required>
-                    </label><br><br>
+                        <input class="form-control" id="main-paswd" type="password" minlength="10" maxlength="20" placeholder="New password" required>
+					</label><br><br>
 					<label for="second">Repeat Password
                         <input class="form-control" id="second" type="password" placeholder="Repeat password" required>
-                    </label><br><br>
+					</label><br><br>
 					<label for="employer">Employer (Optional)
-                        <input class="form-control" id="employer" type="text" placeholder="Employer" required>
+                        <input class="form-control" id="employer" type="text" placeholder="Employer">
                     </label><br><br>
                     <input class="sign-up-btn" type="submit" value="Submit">
                 </form>
 				</br>
 			</div>
-            <div class="form-2 col-xs-12 col-sm-6 col-md-4">
+			<div id="event_create" class="tab-pane fade">
                 <h3 class="event-heading">Create Event</h3>
-				<span id="toggle-sec-2" class="glyphicon glyphicon-menu-down visible-xs-block"></span>
-                <hr>
-                <form name="event-form" id="event-form" class="hidden-xs">
+				<hr>
+                <form name="event-form" id="event-form">
                     <label for="event-name">Event Name 
                         <input class="form-control" id="event-name" type="text" placeholder="Event Name" autocomplete autofocus required>
-                    </label><br><br>
+					</label><br><br>
                     <label for="event-type">Event Type<br> 
                         <input list="events" class="form-control" id="event-type" autocomplete required>
 						<datalist id="events">
@@ -69,39 +72,41 @@
 							<option value="Social Event">
 							<option value="Others">
 						</datalist>
-                    </label><br><br>
+					</label><br><br>
                     <label for="event-host">Event Host 
                         <input class="form-control" id="event-host" type="text" required>
-                    </label><br><br>
+					</label><br><br>
                     <label for="event-start">Event Start Date Time 
                         <input class="form-control" id="event-start" type="datetime-local" required>
-                    </label><br><br>
+					</label><br><br>
                     <label for="event-end">Event End Date Time 
                         <input class="form-control" id="event-end" type="datetime-local" required>
-                    </label><br><br>
+					</label><br><br>
                     <label for="guest-list">Guest List
                         <input class="form-control" id="guest-list" type="text" required>
-                    </label><br><br>
+					</label><br><br>
                     <label for="loc">Location
                         <input class="form-control" id="loc" type="text" required>
-                    </label><br><br>
+					</label><br><br>
                     <label for="msg">Message (Optional)
                         <input class="form-control" id="msg" type="text">
                     </label><br><br>
                     <input type="submit" class="event-submit" value="Submit" >
                 </form>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-4">
-                <h3 class="event-list">Event List</h3>
-				<span id="toggle-sec-3" class="glyphicon glyphicon-menu-down visible-xs-block"></span>
-                <hr>
-				<div id="list" class="hidden-xs list-group">
+			</div>
+			<div id="event_list" class="tab-pane fade">
+                <h3 class="event-list">Events List</h3>
+				<hr>
+				<div class="table-responsive">
+				<table id="list" class="table table-striped">
 				    
+				</table>
 				</div>
             </div>
-        </div>
-    </div>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="js/main.js"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9HgTqVlCwFCWw8rX8Auwu5bKgIO218FI&libraries=places&callback=init" async defer></script>
 </body>
