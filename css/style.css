@@ -31,3 +31,6 @@ input.dirty:not(:focus):invalid {
 input.dirty:not(:focus):valid {
   background-color: #D9FFD9;
 }
+.error-msg{
+	color: red;
+}

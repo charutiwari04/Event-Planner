@@ -30,22 +30,31 @@
 				        <ul id="paswd-req-list"><strong>Password Requirement</strong>
 				            <li>must contain 10 or more characters.</li>
 					        <li>must contain 20 or less characters.</li>
-					        <li>must include lowercase, uppercase letters.</li>
+					        <li>must include one lowercase and uppercase letters.</li>
 					        <li>must contain a number.</li>
-					        <li>must not contain any character other than [A-z 0-9 ! @ # $ % ^ & *].</li>
+							<li>must contain one special character [! @ # $ % ^ & *].</li>
+					        <li>must not contain any character or number other than mentioned above.</li>
 				        </ul>
+						<ul id="email-req-list"><strong>Email Requirement</strong>
+				            <li>must contain only lowercase letters.</li>
+					        <li>email format example@domain.com.</li>
+					    </ul>
 				    </div>
                     <label for="main-name">Your Name 
-                        <input class="form-control" id="main-name" type="text" placeholder="Name" autocomplete autofocus required>
+                        <input class="form-control" id="main-name" type="text" onfocusout="validateName()" placeholder="Name" autocomplete autofocus required>
+						<span class="error-msg" id="main-name-err"></span>
 					</label><br><br>
 					<label for="main-email">Email 
-                        <input class="form-control" id="main-email" type="email" pattern="[A-Za-z0-9._%+-]+\@+[A-Za-z0-9.-]+\.[A-Za-z]{1,}" placeholder="example@abc.com" autocomplete required>
+                        <input class="form-control" id="main-email" type="email" pattern="[a-z0-9._%+-]+@+[a-z0-9.-]+\.[a-z]{1,}" onfocusout="validateEmail()" placeholder="example@abc.com" autocomplete required>
+						<span class="error-msg" id="main-email-err"></span>
 					</label><br><br>
                     <label for="main-paswd">Password 
-                        <input class="form-control" id="main-paswd" type="password" minlength="10" maxlength="20" placeholder="New password" required>
+                        <input class="form-control" id="main-paswd" type="password" maxlength="20" placeholder="New password" onfocusout="validatePaswd()" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{10,}" required>
+						<span class="error-msg" id="main-paswd-err"></span>
 					</label><br><br>
 					<label for="second">Repeat Password
-                        <input class="form-control" id="second" type="password" placeholder="Repeat password" required>
+                        <input class="form-control" id="second" type="password" onkeyup="passwordMatch()" placeholder="Repeat password" required>
+						<span class="error-msg" id="second-err"></span>
 					</label><br><br>
 					<label for="employer">Employer (Optional)
                         <input class="form-control" id="employer" type="text" placeholder="Employer">
@@ -59,10 +68,12 @@
 				<hr>
                 <form name="event-form" id="event-form">
                     <label for="event-name">Event Name 
-                        <input class="form-control" id="event-name" type="text" placeholder="Event Name" autocomplete autofocus required>
+                        <input class="form-control" id="event-name" type="text" onfocusout="validateEname()" placeholder="Event Name" autocomplete autofocus required>
+						<span class="error-msg" id="event-name-err"></span>
 					</label><br><br>
                     <label for="event-type">Event Type<br> 
-                        <input list="events" class="form-control" id="event-type" autocomplete required>
+                        <input list="events" class="form-control" onfocusout="validateEtype()" id="event-type" autocomplete required>
+						<span class="error-msg" id="event-type-err"></span>
 						<datalist id="events">
 						    <option value=''>
 						    <option value="Birthday">
@@ -74,19 +85,24 @@
 						</datalist>
 					</label><br><br>
                     <label for="event-host">Event Host 
-                        <input class="form-control" id="event-host" type="text" required>
+                        <input class="form-control" id="event-host" onfocusout="validateEhost()" type="text" required>
+						<span class="error-msg" id="event-host-err"></span>
 					</label><br><br>
                     <label for="event-start">Event Start Date Time 
-                        <input class="form-control" id="event-start" type="datetime-local" required>
+                        <input class="form-control" id="event-start" onfocusout="validateEstart()" type="datetime-local" required>
+						<span class="error-msg" id="event-start-err"></span>
 					</label><br><br>
                     <label for="event-end">Event End Date Time 
-                        <input class="form-control" id="event-end" type="datetime-local" required>
+                        <input class="form-control" id="event-end" onfocusout="validateEend()" type="datetime-local" required>
+						<span class="error-msg" id="event-end-err"></span>
 					</label><br><br>
                     <label for="guest-list">Guest List
-                        <input class="form-control" id="guest-list" type="text" required>
+                        <input class="form-control" id="guest-list" onfocusout="validateEguest()" type="text" required>
+						<span class="error-msg" id="guest-list-err"></span>
 					</label><br><br>
                     <label for="loc">Location
-                        <input class="form-control" id="loc" type="text" required>
+                        <input class="form-control" id="loc" onfocusout="validateEloc()" type="text" required>
+						<span class="error-msg" id="loc-err"></span>
 					</label><br><br>
                     <label for="msg">Message (Optional)
                         <input class="form-control" id="msg" type="text">

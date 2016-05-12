@@ -18,30 +18,6 @@ function fillInAddress(){
 		
 }
 /*
- * constructor for storing error messages for various input form fields.
- */
-function errorMsgs(){
-	this.msgs = [];
-}
-/*
- * extention to errorMsgs for set() and get() methods.
- */
-errorMsgs.prototype = {
-	set: function(msg){
-		this.msgs.push(msg);
-	},
-	get: function(){
-		switch(this.msgs.length){
-			case 0:
-			    return '';
-			case 1:
-			    return this.msgs[0];
-			default:
-			    return this.msgs.join('\n');
-		}
-	}
-}
-/*
  * reference to client side firebase database which stores event names.
  * function loads the database values onto the page as page loads.
  */
@@ -82,79 +58,127 @@ var events = [];
 	});
 })();
 /*
- * callback function for click event on submit button and 
- * handling creation of the account.
+ * Account form validations.
  */
-function createAccount(){
-	var firstPasswdErrMsgs = new errorMsgs();
-	var secondPasswdErrMsgs = new errorMsgs();
-	var name = document.querySelector('#main-name');
-	var email = document.querySelector('#main-email');
-	var firstPasswd = document.querySelector('#main-paswd');
-	var secondPasswd = document.querySelector('#second');
-	var msg = '';
-	function validateSignUpForm(){
-		if(firstPasswd.value.length > 20){
-			firstPasswdErrMsgs.set('20 or less characters required.');
-		}
-		if (!firstPasswd.value.match(/\d/g)) {
-            firstPasswdErrMsgs.set("missing a number");
-        }
-		if (!firstPasswd.value.match(/[a-z]/g)) {
-			firstPasswdErrMsgs.set("missing a lowercase letter");
-		}
-		if (!firstPasswd.value.match(/[A-Z]/g)) {
-			firstPasswdErrMsgs.set("missing an uppercase letter");
-		}
-
-		var illegalCharacterGroup = firstPasswd.value.match(/[^A-z0-9\!\@\#\$\%\^\&\*]/g)
-		if (illegalCharacterGroup) {
-			illegalCharacterGroup.forEach(function (illegalChar) {
-				firstPasswdErrMsgs.set("includes illegal character " +'"'+ illegalChar+'"');
-			});
-		}
+function validateName(){
+	var txt ="";
+	if(document.getElementById('main-name').validity.valueMissing){
+		txt ="Please fill out the field."
 	}
-	
-	if(firstPasswd.value === secondPasswd.value && firstPasswd.value.length > 0){
-		validateSignUpForm();
+	document.getElementById('main-name-err').innerHTML = txt;
+ }
+function validateEmail(){
+	var txt="";
+	if(document.getElementById('main-email').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	if(document.getElementById('main-email').validity.patternMismatch){
+		txt ="Not Valid Email Format."
+	}
+	document.getElementById('main-email-err').innerHTML = txt;
+} 
+function validatePaswd(){
+	var txt="";
+	if(document.getElementById('main-paswd').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	if(document.getElementById('main-paswd').validity.patternMismatch){
+		txt ="Please follow password requirements."
+	}
+	document.getElementById('main-paswd-err').innerHTML = txt;
+} 
+function passwordMatch(){
+	if(document.getElementById('second').value === document.getElementById('main-paswd').value){
+		document.getElementById('second').setCustomValidity("");
+		document.getElementById('second-err').innerHTML = document.getElementById('second').validationMessage;
 	}
 	else{
-		secondPasswdErrMsgs.set('Password Mismatch');
-	}
-	
-	firstPasswd.setCustomValidity(firstPasswdErrMsgs.get());
-	secondPasswd.setCustomValidity(secondPasswdErrMsgs.get());
-	if(firstPasswdErrMsgs.get().length + secondPasswdErrMsgs.get().length === 0){
-		$('#main-form')[0].reset();
-		alert("Account Created");
+		document.getElementById('second').setCustomValidity("Password Mismatch");
+		document.getElementById('second-err').innerHTML = document.getElementById('second').validationMessage;
 	}
 }
-/*
- * callback function for submit button and creation of event.
- */
-function createEvent(){
-	var eventType = document.querySelector('#event-type');
-	var eventHost = document.querySelector('#event-host');
-	var eventName = document.querySelector('#event-name');
-	var eventStart = document.querySelector('#event-start');
-	var eventEnd = document.querySelector('#event-end');
-	var guestList = document.querySelector('#guest-list');
-	var loc = document.querySelector('#loc'); 
-	var eventTypeErrMsgs = new errorMsgs();
-	var eventDateErrMsg = new errorMsgs();
-	var eventFormError = false;
-	
-	// Event Start and End Date Validation.
-	if(Date.parse(eventStart.value) < Date.parse(eventEnd.value)){
-		eventDateErrMsg.set('');
+var formName = document.getElementById('main-form');
+formName.addEventListener("submit", function(evt) {
+    if (formName.checkValidity() === false) {
+		evt.preventDefault();
+		return false;
 	}
 	else{
-		eventFormError = true;
-		eventDateErrMsg.set("End Date/Time should be greater than Start Date/Time.");
+		$('#main-form')[0].reset();
+	    alert("Account Created");
 	}
-	eventEnd.setCustomValidity(eventDateErrMsg.get());
 	
-	if(!eventFormError && eventType.value.length > 0 && eventName.value.length > 0 && eventHost.value.length > 0 && guestList.value.length > 0 && loc.value.length > 0){
+});
+/*
+ * Event Form validations.
+ */
+function validateEname(){
+	var txt ="";
+	if(document.getElementById('event-name').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	document.getElementById('event-name-err').innerHTML = txt;
+}
+function validateEtype(){
+	var txt ="";
+	if(document.getElementById('event-type').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	document.getElementById('event-type-err').innerHTML = txt;
+}
+function validateEhost(){
+	var txt ="";
+	if(document.getElementById('event-host').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	document.getElementById('event-host-err').innerHTML = txt;
+}
+function validateEstart(){
+	var txt ="";
+	if(document.getElementById('event-start').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	document.getElementById('event-start-err').innerHTML = txt;
+}
+function validateEend(){
+	var txt ="";
+	var eventStart = document.querySelector('#event-start');
+	var eventEnd = document.querySelector('#event-end');
+	if(document.getElementById('event-start').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	if(Date.parse(eventStart.value) >= Date.parse(eventEnd.value)){
+		txt="End Date/Time should be greater than Start Date/Time.";
+	}
+	document.getElementById('event-end').setCustomValidity(txt);
+	document.getElementById('event-end-err').innerHTML = document.getElementById('event-end').validationMessage;
+}
+function validateEguest(){
+	var txt ="";
+	if(document.getElementById('guest-list').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	document.getElementById('guest-list-err').innerHTML = txt;
+}
+function validateEloc(){
+	var txt ="";
+	if(document.getElementById('loc').validity.valueMissing){
+		txt ="Please fill out the field."
+	}
+	document.getElementById('loc-err').innerHTML = txt;
+}
+var formName1 = document.getElementById('event-form');
+formName1.addEventListener("submit", function(evt) {
+    if (formName1.checkValidity() === false) {
+		evt.preventDefault();
+		return false;
+	}
+	else{
+		var eventType = document.querySelector('#event-type');
+		var eventHost = document.querySelector('#event-host');
+		var eventName = document.querySelector('#event-name');
+		var eventStart = document.querySelector('#event-start');
+		var eventEnd = document.querySelector('#event-end');
 		eventStartNew = eventStart.value.replace('T','@');
 		eventEndNew = eventEnd.value.replace('T', '@');
 	    var eventObj = {
@@ -170,19 +194,12 @@ function createEvent(){
 	    events.push(eventObj);
         eventsRef.set(events);
 		$('#event-form')[0].reset();
-		alert("Event Created!!!");
-    }
-}
+	    alert("Event Created");
+	}
+	
+});
 /*
- * Various event handlers.
- */
-$('.sign-up-btn').on('click', createAccount);
-$('.sign-up-btn').on('touchstart', createAccount);
-
-$('.event-submit').on('click', createEvent);
-$('.event-submit').on('touchstart', createEvent);
-/*
- * Live Input fields validation.
+ * Live Input fields validation - color change code.
  */
 var inputs = document.getElementsByTagName("input");
 var inputs_len = inputs.length;
@@ -195,3 +212,15 @@ for (var i = 0; i < inputs_len; i++) {
   input.addEventListener("invalid", addDirtyClass);
   input.addEventListener("valid", addDirtyClass);
 }
+/*
+ * Check Active Tab and Focus Inputs accordingly.
+ */
+$(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+	var target = $(e.target).attr("href") // activated tab
+	if(target === '#event_create'){
+		$('#event-name').focus();
+	}
+	if(target === '#account_create'){
+		$('#main-name').focus();
+	}
+})
